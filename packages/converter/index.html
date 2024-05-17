@@ -7,5 +7,49 @@
 		<title>Convertisseur de devise en ligne</title>
 		<script type="module" src="/src/main.ts" defer></script>
 	</head>
-	<body></body>
+	<body>
+		<main class="container-fluid">
+			<h1>Convertisseur de devise en ligne</h1>
+			<input type="button" id="currenciesBtn" value="Requête Devise"/>
+
+			<form>
+				<fieldset>
+					<label>Prix à convertir</label>
+					<fieldset role="group">
+						<input value="1" type="number" name="priceToConverter"/>
+						<select name="deviseToConverter">
+							<option value="" disabled selected>Devise à convertir</option>
+						</select>
+						<p>à</p>
+						<select name="deviseConverter">
+							<option value disabled selected>Devise convertis</option>
+
+						</select>
+					</fieldset>
+				</fieldset>
+				<input
+					id="submit"
+					type="submit"
+					value="Convertir"
+				/>
+			</form>
+			<div>
+				<h2>Résultats</h2>
+				<input type="number" disabled value=""/>
+			</div>
+			<div>
+				<h2>Historique des conversion</h2>
+				<div class="grid">
+					<p>Prix à convertir</p>
+					<p>Devise à convertir</p>
+					<p>Devise souhaité</p>
+					<p>Résultat</p>
+					<p>Date et heure de conversion</p>
+				</div>
+			</div>
+
+		</main>
+		
+
+	</body>
 </html>
