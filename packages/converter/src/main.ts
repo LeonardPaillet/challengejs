@@ -1,9 +1,7 @@
 import './style.css';
 
-<<<<<<< Updated upstream
 document.body.insertAdjacentHTML('beforeend', '<h1>Hello World!</h1>');
-//test
-=======
+
 //document.body.insertAdjacentHTML('beforeend', '<h1>Hello World!</h1>');
 const apiKey = import.meta.env['VITE_CONVERTER_API_KEY']
 const apiURL = import.meta.env['VITE_CONVERTER_API_URL']
@@ -26,11 +24,11 @@ interface ExchangeInfo{
     value:number
 }
 
-const currenciesBtn = document.querySelector('#currenciesBtn')
-const submit = document.querySelector('input[type=submit]')
-const selectCurrenciesIn = document.querySelector("select[name=deviseToConverter]")
-const selectCurrenciesOut = document.querySelector("select[name=deviseConverter]")
-const amount = document.querySelector("input[name=priceToConverter]")
+const currenciesBtn = document.querySelector<HTMLButtonElement>('#currenciesBtn')
+const submit = document.querySelector<HTMLButtonElement>('input[type=submit]')
+const selectCurrenciesIn = document.querySelector<HTMLSelectElement>("select[name=deviseToConverter]")
+const selectCurrenciesOut = document.querySelector<HTMLSelectElement>("select[name=deviseConverter]")
+const amount = document.querySelector<HTMLButtonElement>("input[name=priceToConverter]")
 
 const getCurrrency = async(): Promise<CurrencyData>=> {
     const response = await fetch(`${apiURL}/currencies?apikey=${apiKey}`)
@@ -62,6 +60,8 @@ const getRatio = async(base_currency : string, currencies: string)=>{
     return ratio
 }
 
+//const writeResult = async()
+
 const toConvert = async(e:Event)=>{
     e.preventDefault()
     const base_currency = "EUR"
@@ -77,4 +77,3 @@ const toConvert = async(e:Event)=>{
 
 currenciesBtn?.addEventListener('click', setupCurrency)
 submit?.addEventListener('click', toConvert)
->>>>>>> Stashed changes
