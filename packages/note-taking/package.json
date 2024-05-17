@@ -9,9 +9,12 @@
 		"format": "prettier --write .",
 		"preview": "vite preview",
 		"test": "vitest",
-		"test:e2e": "playwright test"
+		"test:e2e": "playwright test",
+		"test:e2e:ui": "playwright test --ui"
+
 	},
 	"dependencies": {
+		"@tanstack/react-router": "^1.32.13",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0"
 	},
