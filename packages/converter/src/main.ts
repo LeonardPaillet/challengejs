@@ -1,6 +1,5 @@
 import './style.css';
 
-document.body.insertAdjacentHTML('beforeend', '<h1>Hello World!</h1>');
 
 //document.body.insertAdjacentHTML('beforeend', '<h1>Hello World!</h1>');
 const apiKey = import.meta.env['VITE_CONVERTER_API_KEY']
@@ -24,11 +23,23 @@ interface ExchangeInfo{
     value:number
 }
 
+interface HistoryInfo{
+    price_to_convert : number,
+    currency_to_convert : string
+    currency_wanted : string,
+    price_converted : number,
+    date : string
+
+}
+
 const currenciesBtn = document.querySelector<HTMLButtonElement>('#currenciesBtn')
 const submit = document.querySelector<HTMLButtonElement>('input[type=submit]')
 const selectCurrenciesIn = document.querySelector<HTMLSelectElement>("select[name=deviseToConverter]")
 const selectCurrenciesOut = document.querySelector<HTMLSelectElement>("select[name=deviseConverter]")
 const amount = document.querySelector<HTMLButtonElement>("input[name=priceToConverter]")
+const resultConvert = document.querySelector<HTMLButtonElement>("input[name=resultConvert][type=number]")
+const historyTable : HistoryInfo[] = []
+const historyHTML = document.querySelector<HTMLElement>('#history')
 
 const getCurrrency = async(): Promise<CurrencyData>=> {
     const response = await fetch(`${apiURL}/currencies?apikey=${apiKey}`)
@@ -60,18 +71,77 @@ const getRatio = async(base_currency : string, currencies: string)=>{
     return ratio
 }
 
-//const writeResult = async()
+const writeResult = async(result : number) =>{
+    if(resultConvert){
+        resultConvert.value = result.toString()
+    }
+}
 
 const toConvert = async(e:Event)=>{
     e.preventDefault()
     const base_currency = "EUR"
     const currencies = "USD"
     const ratio = await getRatio(base_currency, currencies)
-    console.log(typeof ratio[currencies])
     if(amount){
-        console.log(typeof parseFloat(amount.value))
-        console.log(parseFloat(amount.value)*ratio[currencies])
+        writeResult(parseFloat(amount.value)*ratio[currencies])
+        addHistory(parseFloat(amount.value), base_currency, currencies, parseFloat(amount.value)*ratio[currencies])
+
     }
+}
+
+const addHistory = async(price_to_convert : number,
+                        currency_to_convert : string,
+                        currency_wanted : string,
+                        price_converted : number,
+                        )=>{
+
+    const newHistoryInfo: HistoryInfo = {
+        price_to_convert: price_to_convert, // Exemple de valeur
+        currency_to_convert: currency_to_convert,
+        currency_wanted: currency_wanted,
+        price_converted: price_converted,
+        date: formatTimestamp(Date.now()) // Date actuelle
+    };
+    historyTable.push(newHistoryInfo)
+
+    if (!historyHTML) return;
+    // Clear existing history
+    historyHTML.innerHTML = `
+        <div class="grid">
+            <p>Prix à convertir</p>
+            <p>Devise à convertir</p>
+            <p>Devise souhaitée</p>
+            <p>Résultat</p>
+            <p>Date et heure de conversion</p>
+        </div>
+    `;
+    historyTable.forEach((history) => {
+        const historyItemDiv = document.createElement('div');
+        historyItemDiv.className = 'grid';
+        historyItemDiv.innerHTML = `
+            <p>${history.price_to_convert}</p>
+            <p>${history.currency_to_convert}</p>
+            <p>${history.currency_wanted}</p>
+            <p>${history.price_converted}</p>
+            <p>${history.date}</p>
+        `;
+        historyHTML.appendChild(historyItemDiv);
+    });
+    
+}
+
+function formatTimestamp(timestamp: number): string {
+    const date = new Date(timestamp);
+
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Les mois commencent à 0
+    const year = date.getFullYear();
+
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+
+    return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
 }
 
 
