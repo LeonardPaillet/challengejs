@@ -5,6 +5,7 @@ import './style.css';
 const apiKey = import.meta.env['VITE_CONVERTER_API_KEY']
 const apiURL = import.meta.env['VITE_CONVERTER_API_URL']
 const CACHE_EXPIRATION_TIME = 24 * 60 * 60 * 1000; 
+const CURRENCY_CACHE_KEY = 'currencyCache';
 
 interface CurrencyInfo {
     symbol: string;
@@ -21,7 +22,7 @@ interface CurrencyData {
 }
 
 interface ExchangeInfo{
-    value:number
+    [key:string]:number
 }
 
 interface HistoryInfo{
@@ -42,12 +43,26 @@ const resultConvert = document.querySelector<HTMLButtonElement>("input[name=resu
 const historyTable : HistoryInfo[] = []
 const historyHTML = document.querySelector<HTMLElement>('#history')
 
-const getCurrrency = async(): Promise<CurrencyData>=> {
+const getCurrency = async (): Promise<CurrencyData> => {
+    const cachedData = localStorage.getItem(CURRENCY_CACHE_KEY);
+    const now = new Date().getTime();
+
+    if (cachedData) {
+        const { data, timestamp } = JSON.parse(cachedData);
+
+        if (now - timestamp < CACHE_EXPIRATION_TIME) {
+            return data;
+        }
+    }
+
+    const response = await fetch(`${apiURL}/currencies?apikey=${apiKey}`);
+    const { data }: { data: CurrencyData } = await response.json();
     
-    const response = await fetch(`${apiURL}/currencies?apikey=${apiKey}`)
-    const { data } : {data: CurrencyData} = await response.json();
-    return data
-}
+    // Mettre à jour le cache
+    localStorage.setItem(CURRENCY_CACHE_KEY, JSON.stringify({ data, timestamp: now }));
+    //oui
+    return data;
+};
 
 const getExchange = async(base_currency : string, currencies: string): Promise<ExchangeInfo>=>{
     const response = await fetch(`${apiURL}/latest?apikey=${apiKey}&base_currency=${base_currency}&currencies=${currencies}`)
@@ -55,9 +70,8 @@ const getExchange = async(base_currency : string, currencies: string): Promise<E
     return data
 }
 
-const setupCurrency = async(e: Event)=>{
-    e.preventDefault();
-    const listCurrency = await getCurrrency()
+const setupCurrency = async()=>{
+    const listCurrency = await getCurrency()
     console.log(listCurrency)
     const baseListCurrency = Object.keys(listCurrency).map((currency)=>`<option value="${currency}">${listCurrency[currency]?.name}</option>`).join('');
     const newListCurrency = Object.keys(listCurrency).map((currency)=>`<option value="${currency}">${listCurrency[currency]?.name}</option>`).join('');
@@ -81,13 +95,21 @@ const writeResult = async(result : number) =>{
 
 const toConvert = async(e:Event)=>{
     e.preventDefault()
-    const base_currency = "EUR"
-    const currencies = "USD"
-    const ratio = await getRatio(base_currency, currencies)
-    if(amount){
-        writeResult(parseFloat(amount.value)*ratio[currencies])
-        addHistory(parseFloat(amount.value), base_currency, currencies, parseFloat(amount.value)*ratio[currencies])
-
+    const base_currency = document.querySelector<HTMLSelectElement>("select[name=deviseToConverter]")
+    const currencies = document.querySelector<HTMLSelectElement>("select[name=deviseConverter]")
+    if(base_currency && currencies){
+        let base_currency_value = base_currency.value
+        let currency_value = currencies.value
+        if(base_currency_value && currency_value){
+            const ratio = await getRatio(base_currency_value, currency_value)
+            if(amount){
+                const conversionRate = ratio[currency_value];
+                if(conversionRate){
+                    writeResult(parseFloat(amount.value)*conversionRate)
+                    addHistory(parseFloat(amount.value), base_currency_value, currency_value, parseFloat(amount.value)*conversionRate)
+                }
+            }
+        }
     }
 }
 
@@ -146,6 +168,5 @@ function formatTimestamp(timestamp: number): string {
     return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
 }
 
-
-currenciesBtn?.addEventListener('click', setupCurrency)
+setupCurrency()
 submit?.addEventListener('click', toConvert)
