@@ -4,6 +4,7 @@ import './style.css';
 //document.body.insertAdjacentHTML('beforeend', '<h1>Hello World!</h1>');
 const apiKey = import.meta.env['VITE_CONVERTER_API_KEY']
 const apiURL = import.meta.env['VITE_CONVERTER_API_URL']
+const CACHE_EXPIRATION_TIME = 24 * 60 * 60 * 1000; 
 
 interface CurrencyInfo {
     symbol: string;
@@ -42,6 +43,7 @@ const historyTable : HistoryInfo[] = []
 const historyHTML = document.querySelector<HTMLElement>('#history')
 
 const getCurrrency = async(): Promise<CurrencyData>=> {
+    
     const response = await fetch(`${apiURL}/currencies?apikey=${apiKey}`)
     const { data } : {data: CurrencyData} = await response.json();
     return data
