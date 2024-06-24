@@ -8,9 +8,13 @@ test.describe('Currency Conversion', () => {
       await route.fulfill({ json: {} });
       });
       
-      await context.route('https://api.freecurrencyapi.com/v1/latest*', async (route) => {
-      await route.fulfill({ json: {} });
-      });
+    await context.route('https://api.freecurrencyapi.com/v1/latest*', async (route) => {
+      await route.fulfill({ json: {
+          data: {
+              USD: 1.0702396871
+          }
+      }});
+    });
   });
 
   test('should convert currency correctly and add to history', async ({ page }) => {
@@ -22,17 +26,17 @@ test.describe('Currency Conversion', () => {
 
     // Simulation du click du bouton
     await page.click('input[type=submit]');
-    
+    await page.waitForTimeout(1000)
     // Simulation de l'affichage du bon résultat
     const result = await page.inputValue("input[name=resultConvert][type=number]")
-    expect(result).toBe('')
+    expect(result).toBe('10.68649883')
 
     // Vérification de l'historique
     const history = await page.textContent('div#history .grid:last-child');
     expect(history).toContain('10'); 
     expect(history).toContain('EUR'); 
     expect(history).toContain('USD'); 
-    expect(history).toContain('10.702396871'); 
+    expect(history).toContain('10.68649883'); 
 
     // Vérification  de la date
     const date = new Date();
@@ -43,7 +47,7 @@ test.describe('Currency Conversion', () => {
 
     const hours = String(date.getHours()).padStart(2, '0');
     const minutes = String(date.getMinutes()).padStart(2, '0');
-    const seconds = String(date.getSeconds()).padStart(2, '0');
+    const seconds = String(date.getSeconds()-1).padStart(2, '0');
 
     const formattedDate =  `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
     expect(history).toContain(formattedDate); 

@@ -2,8 +2,8 @@ import './style.css';
 
 
 //document.body.insertAdjacentHTML('beforeend', '<h1>Hello World!</h1>');
-const apiKey = import.meta.env['VITE_CONVERTER_API_KEY']
-const apiURL = import.meta.env['VITE_CONVERTER_API_URL']
+const apiKey = import.meta.env.VITE_CONVERTER_API_KEY
+const apiURL = import.meta.env.VITE_CONVERTER_API_URL
 const CACHE_EXPIRATION_TIME = 24 * 60 * 60 * 1000; 
 const CURRENCY_CACHE_KEY = 'currencyCache';
 
@@ -17,13 +17,9 @@ interface CurrencyInfo {
     name_plural: string;
 }
 
-interface CurrencyData {
-    [currencyCode: string]: CurrencyInfo;
-}
+type CurrencyData = Record<string, CurrencyInfo>;
 
-interface ExchangeInfo{
-    [key:string]:number
-}
+type ExchangeInfo = Record<string, number>;
 
 interface HistoryInfo{
     price_to_convert : number,
@@ -34,29 +30,33 @@ interface HistoryInfo{
 
 }
 
-const currenciesBtn = document.querySelector<HTMLButtonElement>('#currenciesBtn')
+interface CachedData {
+    data: CurrencyData; // ou le type approprié pour vos données de devise
+    timestamp: number;
+  }
+
 const submit = document.querySelector<HTMLButtonElement>('input[type=submit]')
 const selectCurrenciesIn = document.querySelector<HTMLSelectElement>("select[name=deviseToConverter]")
 const selectCurrenciesOut = document.querySelector<HTMLSelectElement>("select[name=deviseConverter]")
 const amount = document.querySelector<HTMLButtonElement>("input[name=priceToConverter]")
 const resultConvert = document.querySelector<HTMLButtonElement>("input[name=resultConvert][type=number]")
-const historyTable : HistoryInfo[] = []
+const historyTable : Array<HistoryInfo> = []
 const historyHTML = document.querySelector<HTMLElement>('#history')
 
 const getCurrency = async (): Promise<CurrencyData> => {
-    const cachedData = localStorage.getItem(CURRENCY_CACHE_KEY);
-    const now = new Date().getTime();
+    const cachedData = localStorage.getItem('currencyDataCache');
+    const now = Date.now();
 
     if (cachedData) {
-        const { data, timestamp } = JSON.parse(cachedData);
-
+        const parsedData = JSON.parse(cachedData) as CachedData;
+        const { data, timestamp } = parsedData;
         if (now - timestamp < CACHE_EXPIRATION_TIME) {
             return data;
         }
     }
 
     const response = await fetch(`${apiURL}/currencies?apikey=${apiKey}`);
-    const { data }: { data: CurrencyData } = await response.json();
+    const { data }  = await response.json() as { data: CurrencyData };
     
     // Mettre à jour le cache
     localStorage.setItem(CURRENCY_CACHE_KEY, JSON.stringify({ data, timestamp: now }));
@@ -66,7 +66,7 @@ const getCurrency = async (): Promise<CurrencyData> => {
 
 const getExchange = async(base_currency : string, currencies: string): Promise<ExchangeInfo>=>{
     const response = await fetch(`${apiURL}/latest?apikey=${apiKey}&base_currency=${base_currency}&currencies=${currencies}`)
-    const {data} : {data: ExchangeInfo} = await response.json();
+    const {data} = await response.json() as {data: ExchangeInfo};
     return data
 }
 
@@ -83,41 +83,40 @@ const setupCurrency = async()=>{
 }
 
 const getRatio = async(base_currency : string, currencies: string)=>{
-    const ratio = await getExchange(base_currency, currencies)
-    return ratio
+    return await getExchange(base_currency, currencies)
 }
 
-const writeResult = async(result : number) =>{
+const writeResult = (result : number) => {
     if(resultConvert){
         resultConvert.value = result.toString()
     }
 }
 
-const toConvert = async(e:Event)=>{
-    e.preventDefault()
+const toConvert = async(event_:Event)=>{
+    event_.preventDefault()
     const base_currency = document.querySelector<HTMLSelectElement>("select[name=deviseToConverter]")
     const currencies = document.querySelector<HTMLSelectElement>("select[name=deviseConverter]")
     if(base_currency && currencies){
-        let base_currency_value = base_currency.value
-        let currency_value = currencies.value
+        const base_currency_value = base_currency.value
+        const currency_value = currencies.value
         if(base_currency_value && currency_value){
             const ratio = await getRatio(base_currency_value, currency_value)
             if(amount){
                 const conversionRate = ratio[currency_value];
                 if(conversionRate){
-                    writeResult(parseFloat(amount.value)*conversionRate)
-                    addHistory(parseFloat(amount.value), base_currency_value, currency_value, parseFloat(amount.value)*conversionRate)
+                    writeResult(Number.parseFloat(amount.value)*conversionRate)
+                    addHistory(Number.parseFloat(amount.value), base_currency_value, currency_value, Number.parseFloat(amount.value)*conversionRate)
                 }
             }
         }
     }
 }
 
-const addHistory = async(price_to_convert : number,
-                        currency_to_convert : string,
-                        currency_wanted : string,
-                        price_converted : number,
-                        )=>{
+const addHistory = (price_to_convert : number,
+                    currency_to_convert : string,
+                    currency_wanted : string,
+                    price_converted : number,
+                    )=>{
 
     const newHistoryInfo: HistoryInfo = {
         price_to_convert: price_to_convert, // Exemple de valeur
@@ -139,7 +138,7 @@ const addHistory = async(price_to_convert : number,
             <p>Date et heure de conversion</p>
         </div>
     `;
-    historyTable.forEach((history) => {
+    for (const history of historyTable) {
         const historyItemDiv = document.createElement('div');
         historyItemDiv.className = 'grid';
         historyItemDiv.innerHTML = `
@@ -149,8 +148,8 @@ const addHistory = async(price_to_convert : number,
             <p>${history.price_converted}</p>
             <p>${history.date}</p>
         `;
-        historyHTML.appendChild(historyItemDiv);
-    });
+        historyHTML.append(historyItemDiv);
+    }
     
 }
 
@@ -168,5 +167,5 @@ function formatTimestamp(timestamp: number): string {
     return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
 }
 
-setupCurrency()
+await setupCurrency()
 submit?.addEventListener('click', toConvert)
