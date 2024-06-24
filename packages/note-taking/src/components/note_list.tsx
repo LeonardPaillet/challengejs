@@ -11,7 +11,7 @@ import { useNoteStore } from '../store/note';
 export function NoteList(){
     const notes = useNoteStore((state) => state.notes);
     return(
-        <div>
+        <div className='list-note'>
             {notes.map((note:Note)=>(
                 <NoteCard key={note.uuid} noteComponent={note}/>
             ))}
@@ -33,17 +33,21 @@ const NoteCard: React.FC<NoteCardProps> = ({ noteComponent }) => {
     return (
         <div className="note-card">
             <h2>{noteComponent.title}</h2>
-            <p>{noteComponent.content}</p>
-            <p>Créé le: {formatDate(noteComponent.created_at)}</p>
-            {noteComponent.updated_at && (
-                <p>Dernière mise à jour le: {formatDate(noteComponent.updated_at)}</p>
-            )}
             <div>
-            <Link to={`/${noteComponent.uuid}`}>
-                Voir la note
-            </Link>
-                <button onClick={deleteNote}>Supprimer la note</button>
+                <p>Créé le: {formatDate(noteComponent.created_at)}</p>
+                {noteComponent.updated_at && (
+                    <p>Dernière mise à jour le: {formatDate(noteComponent.updated_at)}</p>
+                )}
+            </div>
+            
+            <div className='card-lien'>
+                <Link className='lien-ajout' to={`/${noteComponent.uuid}`}>
+                    Voir la note
+                </Link>
+                <button className='delete-btn' onClick={deleteNote}>Supprimer la note</button>
             </div>
         </div>
     );
 };
+
+

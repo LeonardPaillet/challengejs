@@ -3,7 +3,7 @@ import type { Note } from '../model/note'
 
 import { Link , useParams } from '@tanstack/react-router'
 import MarkdownPreview from '@uiw/react-markdown-preview';
-import React from 'react';
+import React, { useState } from 'react';
 
 import { formatDate } from '../services/utils';
 import { useNoteStore } from "../store/note";
@@ -18,11 +18,12 @@ const NoteView: React.FC = () => {
         return <NotFoundNote/>
     }
     return (
-        <div>
-            <Link to={`/`}>
+        <main>
+            <Link className='btn-accueil' to={`/`}>
                 Accueil
             </Link>
-            <h1>Test</h1>
+            <h1>{note.title}</h1>
+            <MarkdownHtml/>
             {
                 note.content && <MarkdownPreview source={note.content}/>
             }
@@ -37,8 +38,30 @@ const NoteView: React.FC = () => {
             <Link to={`/${parameters.uuid}/update`}>
                 Modifier
             </Link>
-        </div>
+        </main>
     );
 };
 
 export default NoteView;
+
+function MarkdownHtml(){
+    const [stateContent, setStateContent] = useState('Markdown')
+    const [positionBall, setPositionBall] = useState('left')
+    const toggleContent = ()=>{
+        if(stateContent === "Markdown"){
+            setStateContent("HTML")
+            setPositionBall("right")
+        }
+        else{
+            setStateContent("Markdown")
+            setPositionBall("left")
+        }
+        
+    }
+    return(
+        <div onClick={toggleContent} className={`switch ${positionBall}`}>
+            <span className={`switch-ball ${positionBall}`}></span>
+            <p className={`format ${positionBall}`}>{stateContent}</p>
+        </div>
+    )
+}

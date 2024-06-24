@@ -4,12 +4,12 @@ import { FormNote } from '../components/form_note'
 
 export const Route = createLazyFileRoute('/create')({
   component: () => 
-  <div>
-    <Link to={`/`}>
+  <main>
+    <Link className='btn-accueil' to={`/`}>
       Accueil
     </Link>
     <h1>Création de note</h1>
     <FormNote/>
       
-  </div>
+  </main>
 })

@@ -4,65 +4,202 @@
 	font-weight: 400;
 
 	color-scheme: light dark;
-	color: rgba(255, 255, 255, 0.87);
-	background-color: #242424;
+	color: rgba(34, 34, 34, 0.87);
+	background-color: #ebebeb;
 
 	font-synthesis: none;
 	text-rendering: optimizeLegibility;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 }
-
-a {
-	font-weight: 500;
-	color: #646cff;
-	text-decoration: inherit;
+h1{
+	font-size: 2rem;
 }
-a:hover {
-	color: #535bf2;
+h2{
+	font-size: 1.6rem;
+}
+h3{
+	font-size: 1.4rem;
+}
+#root{
+	padding-inline: 12rem;
 }
 
-body {
-	margin: 0;
+textarea{
+	resize: none;
+	font-size: 1rem;
+	font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+	line-height: 1.5;
+	font-weight: 400;
+	padding: 1rem;
+}
+
+main{
+	margin-top: 2rem;
+}
+
+/**BOUTON ACCUEIL **/
+.btn-accueil{
+	padding-inline: 2rem;
+	padding-block: 1rem;
+	border: 2px solid rgb(87, 94, 201);
+	border-radius: 20px;
+	text-decoration: none;
+	background-color: rgb(87, 94, 201);
+	color: #ebebeb;
+	font-size: 1.2rem;
+	font-weight: 520;
+}
+
+/**ACCUEIL**/
+.addNote{
+	padding-inline: 2rem;
+	padding-block: 1rem;
+	border: 2px solid rgb(87, 94, 201);
+	border-radius: 20px;
+	text-decoration: none;
+	background-color: rgb(87, 94, 201);
+	color: #ebebeb;
+	font-size: 1.2rem;
+	font-weight: 520;
+}
+/**NOTE LISTE**/
+.list-note{
 	display: flex;
-	place-items: center;
-	min-width: 320px;
-	min-height: 100vh;
+	flex-wrap: wrap;
+	margin-top: 3rem;
+	gap: 2rem;
 }
 
-h1 {
-	font-size: 3.2em;
-	line-height: 1.1;
+.note-card{
+	background-color: rgb(241, 241, 241);
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	border-radius: 1.2rem;
+	padding: 1.2rem;
+	box-shadow: 2px 4px 5px 5px rgb(139, 139, 139);
 }
 
-button {
+.lien-ajout{
+	padding-inline: 1rem;
+	padding-block: 0.7rem;
+	border: 2px solid rgb(87, 94, 201);
 	border-radius: 8px;
-	border: 1px solid transparent;
-	padding: 0.6em 1.2em;
-	font-size: 1em;
-	font-weight: 500;
-	font-family: inherit;
-	background-color: #1a1a1a;
-	cursor: pointer;
-	transition: border-color 0.25s;
+	text-decoration: none;
+	background-color: rgb(87, 94, 201);
+	color: #ebebeb;
+	font-size: 1.2rem;
+	font-weight: 520;
+	transition: 0.2s;
 }
-button:hover {
-	border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-	outline: 4px auto -webkit-focus-ring-color;
+.lien-ajout:hover{
+	background-color: rgb(57, 62, 134);
 }
 
-@media (prefers-color-scheme: light) {
-	:root {
-		color: #213547;
-		background-color: #ffffff;
-	}
-	a:hover {
-		color: #747bff;
-	}
-	button {
-		background-color: #f9f9f9;
-	}
+.card-lien{
+	display: flex;
+	gap: 1rem;
+	justify-content: space-between;
 }
+
+.delete-btn{
+	background-color: rgb(219, 55, 55);
+	color:#ebebeb ;
+	font-size: 1.2rem;
+	font-weight: 520;
+	border: none;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: 0.2s;
+}
+.delete-btn:hover{
+	background-color: rgb(143, 39, 39);
+}
+
+/**FORM NOTE**/
+form{
+	background-color: rgb(87, 94, 201);
+	padding: 1rem;
+	display: flex;
+	flex-direction: column;
+	gap: 2rem;
+	border-radius: 0.5rem;
+}
+.form-title{
+	display: flex;
+	gap: 1rem;
+	color: #ebebeb;
+}
+.form-title>h2{
+	margin: 0;
+}
+.input-title{
+	border: none;
+	border-radius: 0.2rem;
+	font-size: 1rem;
+	font-weight: 500;
+}
+.btn-submit{
+	border: none;
+	padding: 1rem;
+	font-size: 1.5rem;
+	border-radius: 0.5rem;
+	cursor: pointer;
+	transition: 0.2s;
+}
+.btn-submit:hover{
+	background-color: rgb(87, 94, 201);
+	color: #ebebeb;
+}
+
+/**BOUTON MARKDOWN SWITCH**/
+.switch {
+	position: relative;
+	
+	width: 130px;
+	height: 40px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0 10px;
+	border-radius: 20px;
+	cursor: pointer;
+	transition: 0.3s;
+}
+.switch.right{
+	background-color: rgb(201, 161, 87);
+}
+.switch.left{
+	background-color: rgb(87, 94, 201);
+	color: #ebebeb;
+}
+
+.switch-ball {
+	position: absolute;
+	width: 2rem;
+	height: 2rem;
+	border-radius: 50%;
+	background-color: #ebebeb;
+	transition: transform 0.3s ease;
+}
+
+.switch-ball.left {
+	transform: translateX(-10%);
+}
+
+.switch-ball.right {
+	transform: translateX(320%);
+}
+.format{
+	position: absolute;
+	transition: transform 0.3s ease;
+	font-size: 1.2rem;
+}
+.format.left{
+	transform: translateX(40%);
+}
+.format.right{
+	transform: translateX(10%);
+}
+

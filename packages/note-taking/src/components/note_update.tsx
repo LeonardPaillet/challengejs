@@ -31,29 +31,21 @@ const NoteUpdate: React.FC = () => {
 export default NoteUpdate;
 
 interface FormUpdateNoteProps {
-    note: Note | undefined;
+    note: Note ;
 }
 
 const FormUpdateNote: React.FC<FormUpdateNoteProps> = ({ note }) => {
     const [updatedNote, setUpdatedNote] = useState<Note>({
-        uuid: '',
-        title: '',
-        content: '', 
-        created_at: '',
-        updated_at: '',
-    });
-    const updateNote = useNoteStore((state) => state.updateNote)
-    if(!note){
-        return <NotFoundNote/>
-    }
-    setUpdatedNote({
         uuid: note.uuid,
         title: note.title,
         content: note.content, 
         created_at: note.created_at,
         updated_at: note.updated_at,
-    })
-	
+    });
+    const updateNote = useNoteStore((state) => state.updateNote)
+    if(!note){
+        return <NotFoundNote/>
+    }	
 
 	const noteSubmit = (event_: React.FormEvent) => {
         event_.preventDefault();

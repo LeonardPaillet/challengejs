@@ -10,12 +10,13 @@ export const Route = createLazyFileRoute('/')({
 
 function Index() {
   return (
-    <div className="p-2">
-      <h3>Toutes les notes</h3>
-      <Link to={`/create`}>
+    <div>
+      <h1>Toutes les notes</h1>
+      <Link className='addNote' to={`/create`}>
         Ajouter une note
       </Link>
       <NoteList/>
     </div>
   )
 }
+

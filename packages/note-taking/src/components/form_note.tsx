@@ -40,13 +40,13 @@ export function FormNote() {
     };
 	return (
 		<form onSubmit={noteSubmit}>
-			<div>
+			<div className='form-title'>
 				<h2>Titre : </h2>
-				<input type="text" name="title" value={note.title} onChange={handleChange} />
+				<input type="text" name="title" className='input-title' value={note.title} onChange={handleChange} />
 			</div>
-			<textarea id="content" name="content" rows={4} cols={50} value={note.content} onChange={handleChange}>
+			<textarea id="content" name="content" rows={20} cols={50} value={note.content} onChange={handleChange}>
     		</textarea>
-			<button type="submit">Ajouter</button>
+			<button className='btn-submit' type="submit">Ajouter</button>
 		</form>
 	);
 }
