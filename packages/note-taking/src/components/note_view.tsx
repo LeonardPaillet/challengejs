@@ -2,22 +2,31 @@ import type { Note } from '../model/note'
 
 
 import { Link , useParams } from '@tanstack/react-router'
+import MarkdownPreview from '@uiw/react-markdown-preview';
 import React from 'react';
 
 import { formatDate } from '../services/utils';
 import { useNoteStore } from "../store/note";
 
+import { NotFoundNote } from './not_found';
+
 const NoteView: React.FC = () => {
     const parameters = useParams({ from: '/$uuid/' })
     const getNote = useNoteStore((state)=>state.getNote)
-    const note : Note|undefined = getNote(parameters.uuid)
+    const note = getNote(parameters.uuid)
+    if(!note){
+        return <NotFoundNote/>
+    }
     return (
         <div>
             <Link to={`/`}>
                 Accueil
             </Link>
             <h1>Test</h1>
-            <p>{note?.content}</p>
+            {
+                note.content && <MarkdownPreview source={note.content}/>
+            }
+            
             <p>Créer le {formatDate(note?.created_at)}</p>
             {
                 note?.updated_at ? (

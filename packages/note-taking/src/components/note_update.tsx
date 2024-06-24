@@ -5,12 +5,17 @@ import React, { useState } from 'react';
 
 import { useNoteStore } from "../store/note";
 
+import { NotFoundNote } from './not_found';
+
 
 
 const NoteUpdate: React.FC = () => {
     const parameters = useParams({ from: '/$uuid/update' })
     const getNote = useNoteStore((state)=>state.getNote)
-    const note : Note|undefined = getNote(parameters.uuid)
+    const note = getNote(parameters.uuid)
+    if(!note){
+        return <NotFoundNote/>
+    }
     return (
         <div>
             <Link to={`/`}>
@@ -31,13 +36,24 @@ interface FormUpdateNoteProps {
 
 const FormUpdateNote: React.FC<FormUpdateNoteProps> = ({ note }) => {
     const [updatedNote, setUpdatedNote] = useState<Note>({
-        uuid: note?.uuid,
-        title: note?.title,
-        content: note?.content, 
-        created_at: note?.created_at,
-        updated_at: note?.updated_at,
+        uuid: '',
+        title: '',
+        content: '', 
+        created_at: '',
+        updated_at: '',
     });
-	const updateNote = useNoteStore((state) => state.updateNote)
+    const updateNote = useNoteStore((state) => state.updateNote)
+    if(!note){
+        return <NotFoundNote/>
+    }
+    setUpdatedNote({
+        uuid: note.uuid,
+        title: note.title,
+        content: note.content, 
+        created_at: note.created_at,
+        updated_at: note.updated_at,
+    })
+	
 
 	const noteSubmit = (event_: React.FormEvent) => {
         event_.preventDefault();
