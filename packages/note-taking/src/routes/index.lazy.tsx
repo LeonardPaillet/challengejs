@@ -1,14 +1,21 @@
-import { createLazyFileRoute } from '@tanstack/react-router'
+import { createLazyFileRoute , Link } from '@tanstack/react-router'
+
+
+
+import { NoteList } from '../components/note_list'
 
 export const Route = createLazyFileRoute('/')({
   component: Index,
 })
 
 function Index() {
-  const notes = useNoteStore((state) => state.notes);
   return (
     <div className="p-2">
-      <h3>Welcome Home!</h3>
+      <h3>Toutes les notes</h3>
+      <Link to={`/create`}>
+        Ajouter une note
+      </Link>
+      <NoteList/>
     </div>
   )
 }

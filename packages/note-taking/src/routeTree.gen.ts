@@ -18,6 +18,8 @@ import { Route as rootRoute } from './routes/__root'
 
 const CreateLazyImport = createFileRoute('/create')()
 const IndexLazyImport = createFileRoute('/')()
+const UuidIndexLazyImport = createFileRoute('/$uuid/')()
+const UuidUpdateLazyImport = createFileRoute('/$uuid/update')()
 
 // Create/Update Routes
 
@@ -30,6 +32,16 @@ const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
+
+const UuidIndexLazyRoute = UuidIndexLazyImport.update({
+  path: '/$uuid/',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/$uuid/index.lazy').then((d) => d.Route))
+
+const UuidUpdateLazyRoute = UuidUpdateLazyImport.update({
+  path: '/$uuid/update',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/$uuid/update.lazy').then((d) => d.Route))
 
 // Populate the FileRoutesByPath interface
 
@@ -49,6 +61,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CreateLazyImport
       parentRoute: typeof rootRoute
     }
+    '/$uuid/update': {
+      id: '/$uuid/update'
+      path: '/$uuid/update'
+      fullPath: '/$uuid/update'
+      preLoaderRoute: typeof UuidUpdateLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/$uuid/': {
+      id: '/$uuid/'
+      path: '/$uuid'
+      fullPath: '/$uuid'
+      preLoaderRoute: typeof UuidIndexLazyImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -57,6 +83,8 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren({
   IndexLazyRoute,
   CreateLazyRoute,
+  UuidUpdateLazyRoute,
+  UuidIndexLazyRoute,
 })
 
 /* prettier-ignore-end */
@@ -68,7 +96,9 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/create"
+        "/create",
+        "/$uuid/update",
+        "/$uuid/"
       ]
     },
     "/": {
@@ -76,6 +106,12 @@ export const routeTree = rootRoute.addChildren({
     },
     "/create": {
       "filePath": "create.lazy.tsx"
+    },
+    "/$uuid/update": {
+      "filePath": "$uuid/update.lazy.tsx"
+    },
+    "/$uuid/": {
+      "filePath": "$uuid/index.lazy.tsx"
     }
   }
 }
