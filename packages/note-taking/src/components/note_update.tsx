@@ -17,14 +17,14 @@ const NoteUpdate: React.FC = () => {
         return <NotFoundNote/>
     }
     return (
-        <div>
-            <Link to={`/`}>
+        <main>
+            <Link className='btn-accueil' to={`/`}>
                 Accueil
             </Link>
             <h1>Modification</h1>
             
             <FormUpdateNote note={note}/>
-        </div>
+        </main>
     );
 };
 
@@ -63,13 +63,13 @@ const FormUpdateNote: React.FC<FormUpdateNoteProps> = ({ note }) => {
     };
     return(
         <form onSubmit={noteSubmit}>
-			<div>
+			<div className='form-title'>
 				<h2>Titre : </h2>
-				<input type="text" name="title" value={updatedNote.title} onChange={handleChange} />
+				<input className='input-title' type="text" name="title" value={updatedNote.title} onChange={handleChange} />
 			</div>
-			<textarea id="content" name="content" rows={4} cols={50} value={updatedNote.content} onChange={handleChange}>
+			<textarea id="content" name="content" rows={20} cols={50} value={updatedNote.content} onChange={handleChange}>
     		</textarea>
-			<button type="submit">Mettre à jour</button>
+			<button className='btn-submit' type="submit">Mettre à jour</button>
 		</form>
     )
 }

@@ -4,13 +4,21 @@
 	font-weight: 400;
 
 	color-scheme: light dark;
-	color: rgba(34, 34, 34, 0.87);
-	background-color: #ebebeb;
+	
 
 	font-synthesis: none;
 	text-rendering: optimizeLegibility;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+	--primary:rgb(87, 94, 201);
+	--primaryHover: rgb(57, 62, 134);
+	--secondary: rgb(201, 161, 87);
+	--secondaryHover: rgb(156, 126, 71);
+	--black: rgba(34, 34, 34, 0.87);
+	--white: #ebebeb;
+	
+	color: var(--black);
+	background-color: var(--white);
 }
 h1{
 	font-size: 2rem;
@@ -42,24 +50,28 @@ main{
 .btn-accueil{
 	padding-inline: 2rem;
 	padding-block: 1rem;
-	border: 2px solid rgb(87, 94, 201);
+	border: 2px solid var(--primary);
 	border-radius: 20px;
 	text-decoration: none;
-	background-color: rgb(87, 94, 201);
-	color: #ebebeb;
+	background-color: var(--primary);
+	color: var(--white);
 	font-size: 1.2rem;
 	font-weight: 520;
+	transition:0.2s
+}
+.btn-accueil:hover{
+	background-color: var(--primaryHover);
 }
 
 /**ACCUEIL**/
 .addNote{
 	padding-inline: 2rem;
 	padding-block: 1rem;
-	border: 2px solid rgb(87, 94, 201);
+	border: 2px solid var(--primary);
 	border-radius: 20px;
 	text-decoration: none;
-	background-color: rgb(87, 94, 201);
-	color: #ebebeb;
+	background-color: var(--primary);
+	color: var(--white);
 	font-size: 1.2rem;
 	font-weight: 520;
 }
@@ -84,17 +96,17 @@ main{
 .lien-ajout{
 	padding-inline: 1rem;
 	padding-block: 0.7rem;
-	border: 2px solid rgb(87, 94, 201);
+	border: 2px solid var(--primary);
 	border-radius: 8px;
 	text-decoration: none;
-	background-color: rgb(87, 94, 201);
-	color: #ebebeb;
+	background-color: var(--primary);
+	color: var(--white);
 	font-size: 1.2rem;
 	font-weight: 520;
 	transition: 0.2s;
 }
 .lien-ajout:hover{
-	background-color: rgb(57, 62, 134);
+	background-color: var(--primaryHover);
 }
 
 .card-lien{
@@ -105,7 +117,7 @@ main{
 
 .delete-btn{
 	background-color: rgb(219, 55, 55);
-	color:#ebebeb ;
+	color:var(--white);
 	font-size: 1.2rem;
 	font-weight: 520;
 	border: none;
@@ -119,7 +131,7 @@ main{
 
 /**FORM NOTE**/
 form{
-	background-color: rgb(87, 94, 201);
+	background-color: var(--primary);
 	padding: 1rem;
 	display: flex;
 	flex-direction: column;
@@ -129,7 +141,7 @@ form{
 .form-title{
 	display: flex;
 	gap: 1rem;
-	color: #ebebeb;
+	color: var(--white);
 }
 .form-title>h2{
 	margin: 0;
@@ -149,8 +161,8 @@ form{
 	transition: 0.2s;
 }
 .btn-submit:hover{
-	background-color: rgb(87, 94, 201);
-	color: #ebebeb;
+	background-color: var(--secondaryHover);
+	color: var(--white);
 }
 
 /**BOUTON MARKDOWN SWITCH**/
@@ -168,11 +180,11 @@ form{
 	transition: 0.3s;
 }
 .switch.right{
-	background-color: rgb(201, 161, 87);
+	background-color: var(--secondary);
 }
 .switch.left{
-	background-color: rgb(87, 94, 201);
-	color: #ebebeb;
+	background-color: var(--primary);
+	color: var(--white);
 }
 
 .switch-ball {
@@ -180,7 +192,7 @@ form{
 	width: 2rem;
 	height: 2rem;
 	border-radius: 50%;
-	background-color: #ebebeb;
+	background-color: var(--white);
 	transition: transform 0.3s ease;
 }
 
@@ -203,3 +215,24 @@ form{
 	transform: translateX(10%);
 }
 
+/**VIEW NOTE**/
+.note-view{
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+.btn-modif{
+	background-color: var(--secondary);
+	font-size: 1.2rem;
+	font-weight: 520;
+	border: none;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: 0.2s;
+	text-decoration: none;
+	padding: 0.5rem 1.5rem 0.5rem 1.5rem;
+	color: var(--black);
+}
+.btn-modif:hover{
+	background-color: var(--secondaryHover);
+}

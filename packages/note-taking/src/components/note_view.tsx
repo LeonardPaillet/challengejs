@@ -1,4 +1,3 @@
-import type { Note } from '../model/note'
 
 
 import { Link , useParams } from '@tanstack/react-router'
@@ -23,19 +22,25 @@ const NoteView: React.FC = () => {
                 Accueil
             </Link>
             <h1>{note.title}</h1>
-            <MarkdownHtml/>
-            {
-                note.content && <MarkdownPreview source={note.content}/>
-            }
+            <div className='note-view'>
+                <MarkdownHtml/>
+                <div>
+                    {
+                        note.content && <MarkdownPreview className='markdown-preview' source={note.content}/>
+                    }
+                    
+                    <p>Créer le {formatDate(note?.created_at)}</p>
+                    {
+                        note?.updated_at ? (
+                            <p>Mise à jour le {formatDate(note.updated_at)}</p>
+                        ) :
+                        null
+                    }
+                </div>
+            </div>
+                
             
-            <p>Créer le {formatDate(note?.created_at)}</p>
-            {
-                note?.updated_at ? (
-                    <p>Mise à jour le {formatDate(note.updated_at)}</p>
-                ) :
-                null
-            }
-            <Link to={`/${parameters.uuid}/update`}>
+            <Link className='btn-modif' to={`/${parameters.uuid}/update`}>
                 Modifier
             </Link>
         </main>
