@@ -9,17 +9,26 @@
 		"format": "prettier --write .",
 		"preview": "vite preview",
 		"test": "vitest",
-		"test:e2e": "playwright test"
+		"test:e2e": "playwright test",
+		"test:e2e:ui": "playwright test --ui"
 	},
 	"dependencies": {
+		"@tanstack/react-router": "^1.32.13",
+		"@tanstack/router-devtools": "^1.40.0",
+		"@tanstack/router-plugin": "^1.39.13",
+		"@types/uuid": "^10.0.0",
+		"@uiw/react-markdown-preview": "^5.1.2",
 		"react": "^18.2.0",
-		"react-dom": "^18.2.0"
+		"react-dom": "^18.2.0",
+		"uuid": "^10.0.0",
+		"zustand": "^4.5.2"
 	},
 	"devDependencies": {
 		"@eslint-community/eslint-plugin-eslint-comments": "^4.3.0",
 		"@eslint/eslintrc": "^3.0.2",
 		"@eslint/js": "^9.2.0",
 		"@playwright/test": "^1.44.0",
+		"@tanstack/router-vite-plugin": "^1.39.13",
 		"@testing-library/jest-dom": "^6.4.5",
 		"@testing-library/react": "^15.0.7",
 		"@testing-library/user-event": "^14.5.2",
@@ -46,6 +55,7 @@
 		"globals": "^15.2.0",
 		"jsdom": "^24.0.0",
 		"prettier": "^3.2.5",
+		"react-router-dom": "^6.23.1",
 		"tslib": "^2.6.2",
 		"typescript": "^5.2.2",
 		"typescript-eslint": "^7.8.0",
