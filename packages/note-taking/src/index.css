@@ -32,6 +32,11 @@ h3{
 #root{
 	padding-inline: 12rem;
 }
+@media (max-width: 768px) {
+	#root {
+	  padding-inline: 2rem;
+	}
+  }
 
 textarea{
 	resize: none;
@@ -143,6 +148,11 @@ form{
 	gap: 1rem;
 	color: var(--white);
 }
+@media (max-width: 768px) {
+	.form-title {
+	  flex-direction: column;
+	}
+  }
 .form-title>h2{
 	margin: 0;
 }
