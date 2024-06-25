@@ -60,7 +60,6 @@ const getCurrency = async (): Promise<CurrencyData> => {
     
     // Mettre à jour le cache
     localStorage.setItem(CURRENCY_CACHE_KEY, JSON.stringify({ data, timestamp: now }));
-    //oui
     return data;
 };
 
@@ -92,7 +91,7 @@ const writeResult = (result : number) => {
     }
 }
 
-const toConvert = async(event_:Event)=>{
+const toConvert = async(event_:Event) =>{
     event_.preventDefault()
     const base_currency = document.querySelector<HTMLSelectElement>("select[name=deviseToConverter]")
     const currencies = document.querySelector<HTMLSelectElement>("select[name=deviseConverter]")
