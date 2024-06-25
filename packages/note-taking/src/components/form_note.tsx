@@ -17,7 +17,10 @@ export function FormNote() {
 
 	const noteSubmit = (event_: React.FormEvent) => {
         event_.preventDefault();
-
+        if(!note.title || !note.content){
+            alert("Champs vide")
+            return
+        }
         addNote(note);
 		console.log(getNote(note.uuid))
 		
